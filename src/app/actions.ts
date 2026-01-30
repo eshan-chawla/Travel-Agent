@@ -37,7 +37,6 @@ export async function createCompany(formData: FormData) {
       },
     })
     revalidatePath('/dashboard')
-    revalidatePath('/admin')
   } catch (error) {
     console.error('Failed to create company:', error)
   }
@@ -90,7 +89,6 @@ export async function createUser(formData: FormData) {
       },
     })
     revalidatePath('/dashboard')
-    revalidatePath('/admin')
   } catch (error) {
     console.error('Failed to create user:', error)
   }
@@ -144,7 +142,6 @@ export async function createTrip(formData: FormData) {
       },
     })
     revalidatePath('/dashboard')
-    revalidatePath('/admin')
   } catch (error) {
     console.error('Failed to create trip:', error)
   }

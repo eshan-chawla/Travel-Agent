@@ -6,7 +6,7 @@ export default async function ProfilePage() {
   const hasCompany = await checkCompanyProfile();
 
   if (hasCompany) {
-    redirect('/admin');
+    redirect('/dashboard');
   }
 
   return (
