@@ -158,7 +158,10 @@ export default async function Dashboard() {
       {/* Trip Section */}
       <section className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
         <h2 className="text-xl font-semibold mb-4">Add Trip</h2>
-        <form action={createTrip} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <form action={async (formData) => {
+          'use server'
+          await createTrip(formData)
+        }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <input
             name="tripId"
             placeholder="Trip ID"
