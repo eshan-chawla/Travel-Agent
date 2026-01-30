@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Company {
+  id          String   @id @default(cuid())
+  companyId   String   @unique // "company id" from requirements, maybe an external ID
+  name        String
+  authId      String   // "auth id" from requirements
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  users       User[]
+  trips       Trip[]
+}
+
+model User {
+  id          String   @id @default(cuid())
+  userId      String   @unique // "user id" from requirements, separate from internal PK
+  name        String
+  email       String   @unique
+  phoneNumber String?
+  addedBy     String?  // "the one who added them"
+  companyId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company     Company  @relation(fields: [companyId], references: [id])
+  trips       Trip[]
+}
+
+model Trip {
+  id            String   @id @default(cuid())
+  tripId        String   @unique // "trip id"
+  startDate     DateTime
+  endDate       DateTime
+  startingPoint String
+  destination   String
+  budget        Float
+  companyId     String
+  userId        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  company       Company  @relation(fields: [companyId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
+}
