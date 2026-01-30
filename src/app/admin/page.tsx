@@ -1,9 +1,14 @@
 import { UserButton } from "@clerk/nextjs";
-import { createUser, createTrip, getUsers, getCompanies, getTrips } from "../actions";
+import { createUser, createTrip, getUsers, getTrips, checkCompanyProfile } from "../actions";
+import { redirect } from "next/navigation";
 
 export default async function AdminPage() {
+  const hasCompany = await checkCompanyProfile();
+  if (!hasCompany) {
+    redirect('/profile');
+  }
+
   const { data: users } = await getUsers();
-  const { data: companies } = await getCompanies();
   const { data: trips } = await getTrips();
 
   return (
@@ -14,24 +19,20 @@ export default async function AdminPage() {
       </header>
       <main className="flex flex-col gap-8">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="p-6 rounded-lg border border-black/[.08] dark:border-white/[.145] bg-white/[.02]">
-            <h2 className="text-xl font-semibold mb-2">Total Users</h2>
+            <h2 className="text-xl font-semibold mb-2">Total Employees</h2>
             <p className="text-4xl font-bold">{users?.length || 0}</p>
           </div>
           <div className="p-6 rounded-lg border border-black/[.08] dark:border-white/[.145] bg-white/[.02]">
             <h2 className="text-xl font-semibold mb-2">Active Trips</h2>
             <p className="text-4xl font-bold">{trips?.length || 0}</p>
           </div>
-          <div className="p-6 rounded-lg border border-black/[.08] dark:border-white/[.145] bg-white/[.02]">
-            <h2 className="text-xl font-semibold mb-2">Companies</h2>
-            <p className="text-4xl font-bold">{companies?.length || 0}</p>
-          </div>
         </div>
         
         {/* Add User Section */}
         <section className="p-6 rounded-lg border border-black/[.08] dark:border-white/[.145] bg-white/[.02]">
-          <h2 className="text-2xl font-bold mb-6">Add User</h2>
+          <h2 className="text-2xl font-bold mb-6">Add Employee</h2>
           <form action={async (formData) => {
             'use server'
             await createUser(formData)
@@ -49,35 +50,16 @@ export default async function AdminPage() {
               required
               className="p-3 border rounded bg-transparent"
             />
-            <input
-              name="userId"
-              placeholder="User ID (Custom)"
-              required
-              className="p-3 border rounded bg-transparent"
-            />
              <input
               name="phoneNumber"
               placeholder="Phone Number"
               className="p-3 border rounded bg-transparent"
             />
-             <select
-              name="companyId"
-              required
-              className="p-3 border rounded bg-transparent"
-              defaultValue=""
-            >
-              <option value="" disabled className="text-black">Select Company</option>
-              {companies?.map((company: any) => (
-                <option key={company.id} value={company.id} className="text-black">
-                  {company.name}
-                </option>
-              ))}
-            </select>
             <button
               type="submit"
               className="bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition-colors font-semibold"
             >
-              Add User
+              Add Employee
             </button>
           </form>
         </section>
@@ -110,19 +92,6 @@ export default async function AdminPage() {
                 required
                 className="p-3 border rounded bg-transparent"
               />
-               <select
-                name="companyId"
-                required
-                className="p-3 border rounded bg-transparent"
-                defaultValue=""
-              >
-                <option value="" disabled className="text-black">Select Company</option>
-                {companies?.map((company: any) => (
-                  <option key={company.id} value={company.id} className="text-black">
-                    {company.name}
-                  </option>
-                ))}
-              </select>
               <div className="flex flex-col">
                 <label className="text-sm text-gray-500 mb-1">Start Date</label>
                 <input
@@ -157,7 +126,6 @@ export default async function AdminPage() {
                     />
                     <div className="flex flex-col">
                       <span className="font-medium">{user.name}</span>
-                      <span className="text-xs text-gray-500">{user.company?.name}</span>
                     </div>
                   </label>
                 ))}
@@ -183,7 +151,6 @@ export default async function AdminPage() {
                 <tr>
                   <th className="p-3 rounded-tl-lg">Route</th>
                   <th className="p-3">Dates</th>
-                  <th className="p-3">Company</th>
                   <th className="p-3">Participants</th>
                   <th className="p-3 rounded-tr-lg">Action</th>
                 </tr>
@@ -195,7 +162,6 @@ export default async function AdminPage() {
                     <td className="p-3">
                       {new Date(trip.startDate).toLocaleDateString()} - {new Date(trip.endDate).toLocaleDateString()}
                     </td>
-                    <td className="p-3">{trip.company?.name}</td>
                     <td className="p-3">{trip.participants?.length || 0} People</td>
                     <td className="p-3">
                        <details className="relative">
@@ -218,7 +184,7 @@ export default async function AdminPage() {
                 ))}
                  {!trips?.length && (
                    <tr>
-                      <td colSpan={5} className="p-6 text-center text-gray-500">No events found</td>
+                      <td colSpan={4} className="p-6 text-center text-gray-500">No events found</td>
                    </tr>
                 )}
               </tbody>

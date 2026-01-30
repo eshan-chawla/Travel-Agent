@@ -1,9 +1,15 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
 const isProtectedRoute = createRouteMatcher(['/admin(.*)', '/dashboard(.*)'])
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) await auth.protect()
+  if (isProtectedRoute(req)) {
+    await auth.protect()
+    
+    // Redirect logic handled in pages or layout via checkCompanyProfile to avoid edge middleware DB issues
+    // Prisma cannot run in edge middleware
+  }
 })
 
 export const config = {
