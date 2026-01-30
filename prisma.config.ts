@@ -9,7 +9,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    provider: "postgresql",
     // Use the direct connection (non-pooling) for migrations and db push
     url: process.env.POSTGRES_URL_NON_POOLING, 
   },
