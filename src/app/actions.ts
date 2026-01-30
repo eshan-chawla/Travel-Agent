@@ -18,10 +18,8 @@ export async function createCompany(formData: FormData) {
       },
     })
     revalidatePath('/dashboard')
-    return { success: true }
   } catch (error) {
     console.error('Failed to create company:', error)
-    return { success: false, error: 'Failed to create company' }
   }
 }
 
@@ -51,7 +49,8 @@ export async function createUser(formData: FormData) {
     })
     
     if (!company) {
-       return { success: false, error: 'Company not found' }
+       console.error('Company not found')
+       return
     }
 
     await prisma.user.create({
@@ -65,10 +64,8 @@ export async function createUser(formData: FormData) {
       },
     })
     revalidatePath('/dashboard')
-    return { success: true }
   } catch (error) {
     console.error('Failed to create user:', error)
-    return { success: false, error: 'Failed to create user' }
   }
 }
 
@@ -109,10 +106,8 @@ export async function createTrip(formData: FormData) {
       },
     })
     revalidatePath('/dashboard')
-    return { success: true }
   } catch (error) {
     console.error('Failed to create trip:', error)
-    return { success: false, error: 'Failed to create trip' }
   }
 }
 

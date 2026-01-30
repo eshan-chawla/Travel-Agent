@@ -70,7 +70,10 @@ export default async function Dashboard() {
       {/* User Section */}
       <section className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
         <h2 className="text-xl font-semibold mb-4">Add User</h2>
-        <form action={createUser} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <form action={async (formData) => {
+          'use server'
+          await createUser(formData)
+        }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <input
             name="name"
             placeholder="Name"
