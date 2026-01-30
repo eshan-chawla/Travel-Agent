@@ -10,14 +10,13 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.37.0",
-    "@prisma/client": "^7.3.0",
     "@supabase/supabase-js": "^2.93.3",
     "next": "16.1.6",
-    "prisma": "^7.3.0",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@prisma/client": "^5.22.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -26,6 +25,7 @@
     "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "prisma": "^5.22.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
