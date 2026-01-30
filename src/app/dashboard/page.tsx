@@ -50,7 +50,7 @@ export default async function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {companies?.map((company) => (
+              {companies?.map((company: any) => (
                 <tr key={company.id} className="border-t">
                   <td className="p-2">{company.name}</td>
                   <td className="p-2">{company.companyId}</td>
@@ -110,7 +110,7 @@ export default async function Dashboard() {
             defaultValue=""
           >
             <option value="" disabled>Select Company</option>
-            {companies?.map((company) => (
+            {companies?.map((company: any) => (
               <option key={company.id} value={company.id}>
                 {company.name}
               </option>
@@ -138,7 +138,7 @@ export default async function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {users?.map((user) => (
+              {users?.map((user: any) => (
                 <tr key={user.id} className="border-t">
                   <td className="p-2">{user.name}</td>
                   <td className="p-2">{user.email}</td>
@@ -259,7 +259,7 @@ export default async function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {trips?.map((trip) => (
+              {trips?.map((trip: any) => (
                 <tr key={trip.id} className="border-t">
                   <td className="p-2">{trip.tripId}</td>
                   <td className="p-2">
