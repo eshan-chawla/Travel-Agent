@@ -89,23 +89,26 @@ export async function createTrip(formData: FormData) {
   const destination = formData.get('destination') as string
   const budget = parseFloat(formData.get('budget') as string)
   const companyId = formData.get('companyId') as string
-  const userId = formData.get('userId') as string // Internal DB ID of the user
-  const tripId = formData.get('tripId') as string
+  const participantIds = formData.getAll('participantIds') as string[] // Expect multiple selected user IDs
 
   try {
-    await prisma.trip.create({
+    const trip = await prisma.trip.create({
       data: {
-        tripId,
         startDate,
         endDate,
         startingPoint,
         destination,
         budget,
         companyId,
-        userId,
+        participants: {
+          create: participantIds.map((userId) => ({
+            userId,
+          })),
+        },
       },
     })
     revalidatePath('/dashboard')
+    revalidatePath('/admin')
   } catch (error) {
     console.error('Failed to create trip:', error)
   }
@@ -114,7 +117,14 @@ export async function createTrip(formData: FormData) {
 export async function getTrips() {
   try {
     const trips = await prisma.trip.findMany({
-      include: { company: true, user: true }
+      include: { 
+        company: true, 
+        participants: {
+          include: {
+            user: true
+          }
+        } 
+      }
     })
     return { success: true, data: trips }
   } catch (error) {
